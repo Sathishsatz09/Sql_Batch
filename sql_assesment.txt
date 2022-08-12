@@ -1,0 +1,143 @@
+                                                            
+                                                          MICROSOFT SQL SERVER 2022 ASSESSMENT
+
+
+1.What are the differences between local and global temporary tables?
+Answer: Local temporary tables are only accessible from their creation context, such as the connection. 
+Global temporary tables are accessible from other connection contexts. 
+Both local temporary and global temporary tables reside in the tempdatabase.
+
+2.What is CHECK constraint? 
+Answer: CHECK constraint will use while creating the table, its used to check the condition what we are giving the 
+condition to the column. then if condition is true it will allow the data to store in the table. example (empsalary money CHECK <100000)
+
+3.What is a Trigger? 
+Answer: Trigger function is used to block the Data definition language, Data manipulation language operations, 
+it will not allow to create,delete,update,alter,drop & insert if we trigger the specific operations.
+
+4.What is an IDENTITY column in insert statements?
+Answer: An identity column contains a unique numeric value for each row in the table. 
+Whether you can insert data into an identity column and how that data gets inserted depends on how the column
+
+5.What is the difference between COMMIT and ROLLBACK? 
+
+6.What is Filtered Index? 
+Answer: A filtered index is used to filter predict the index portion of the row in the table.
+
+7.What is a JOIN, and mention its Types? 
+Answer: JOIN operation is used to join the two or more tables from the database. 
+        Types of join:
+        1. Inner join
+        2. Left join 
+        3. Right join 
+        4. Full join
+        5. Outer join
+
+8.How can you relate a Foreign Key and a Primary Key? 
+Answer: First we will create a table  two tables to connect primary key and foreign key, using the primary key 
+we can refer the data to the foreign key.
+
+9.What is the difference between Stored Procedures and Functions?
+
+10.What do you mean by Clustered Indexes? 
+Answer: The rows can be stored in only one order in the clustered index.
+
+
+SQL QUERIES
+
+create database test
+use test  
+CREATE TABLE Workers (
+	WORKER_ID INT NOT NULL,
+	FIRST_NAME varchar(25),
+	LAST_NAME varchar(25),
+	SALARY money,
+	JOINING_DATE DATETIME,
+	DEPARTMENT varchar(25)
+);  
+INSERT INTO Workers VALUES(001, 'Monika', 'Arora', 100000, '06-08-2022 10:38:00', 'HR')
+INSERT INTO Workers VALUES(002, 'Niharika', 'Verma', 80000, '06-08-2022 10:38:00', 'Admin')
+INSERT INTO Workers VALUES(003, 'Vishal', 'Singhal', 300000, '06-08-2022 10:38:00', 'HR')
+INSERT INTO Workers VALUES(004, 'Amitabh', 'Singh', 500000, '06-08-2022 10:38:00', 'Admin')
+INSERT INTO Workers VALUES(005, 'Vivek', 'Bhati', 500000, '06-08-2022 10:38:00', 'Admin')
+INSERT INTO Workers VALUES(006, 'Vipul', 'Diwan', 200000, '06-08-2022 10:38:00', 'Account')
+INSERT INTO Workers VALUES(007, 'Satish', 'Kumar', 75000, '06-08-2022 10:38:00', 'Account')
+INSERT INTO Workers VALUES(008, 'Geetika', 'Chauhan', 90000, '06-08-2022 10:38:00', 'Admin') 
+
+CREATE TABLE Title (
+	WORKER_REF_ID INT,
+	WORKER_TITLE CHAR(25),
+	AFFECTED_FROM DATETIME, 
+)   
+
+CREATE TABLE Bonus (
+	WORKER_REF_ID INT,
+	BONUS_AMOUNT INT(10),
+	BONUS_DATE DATETIME,
+	FOREIGN KEY (WORKER_REF_ID)
+		REFERENCES Workers(WORKER_ID)
+        ON DELETE CASCADE
+);
+-- Question 1-> Write an SQL query to clone a new table from another table.
+
+select * into clone  from Workers; 
+select * from clone 
+select * from Workers
+
+-- Question 2 -> Select CONCAT(FIRST_NAME, LAST_NAME) AS 'COMPLETE_NAME' from Worker;  
+
+Select CONCAT(FIRST_NAME, ' ' , LAST_NAME) AS 'COMPLETE_NAME' from Workers;  
+
+-- Question 3 -> Write an SQL query to print all Worker details from the Worker table order by FIRST_NAME Ascending.
+
+ SELECT * FROM Workers ORDER BY FIRST_NAME asc;
+
+-- Question 4 -> Write an SQL query to print details of the Workers whose SALARY lies between 100000 and 500000. 
+
+ Select * from Workers where SALARY between 100000 and 500000; 
+
+ -- Question 5 -> Write an SQL query to fetch the no. of workers for each department in the descending order.
+
+select * from Workers order by DEPARTMENT desc;
+
+-- Question 6 -> Create a DML trigger for update on table ‘Title’
+
+create trigger trg_update
+on Title
+FOR update
+as
+begin
+	print 'You cannot insert perform the dml operation'
+	rollback transaction 
+end  
+
+disable trigger trg_update on Title
+enable trigger trg_update on Title 
+
+
+-- Question 7 -> Create a Function to Calculate Simple Interest
+
+create function ptr(@p int, @t int, @r int)
+return int
+as 
+begin 
+return @p*@t*@r % 100
+end 
+
+
+-- Question 9 -> Create a filtered index on ‘Bonus_Date’ column in ‘Bonus’ table 
+
+create index idx_bonusdate on bonus(bonus_date)
+
+
+select * from Workers
+select * from Title 
+
+
+
+
+
+
+
+
+
